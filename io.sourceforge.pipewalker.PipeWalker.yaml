@@ -12,20 +12,32 @@ finish-args:
   - --socket=pulseaudio
 
 modules:
-  - shared-modules/glu/glu-9.json
   - shared-modules/SDL/sdl12-compat.json
 
   - name: pipewalker
     buildsystem: autotools
+    rm-configure: true
     post-install:
       - desktop-file-edit --set-icon=${FLATPAK_ID} ${FLATPAK_DEST}/share/applications/pipewalker.desktop
       - install -Dm644 ${FLATPAK_ID}.png ${FLATPAK_DEST}/share/icons/hicolor/128x128/apps/${FLATPAK_ID}.png
       - install -Dm644 ${FLATPAK_ID}.metainfo.xml ${FLATPAK_DEST}/share/metainfo/${FLATPAK_ID}.metainfo.xml
     sources:
-      - type: archive
-        url: http://downloads.sourceforge.net/pipewalker/pipewalker-0.9.4.tar.gz
-        sha256: d6d7717f1f333847cc4a2e9d83e97b971b3bfb539d99d4ae30a5140de6e386f4
+      - type: git
+        url: https://github.com/artemsen/pipewalker
+        tag: 'v0.9.5'
+        commit: e19ec46d48ff488c41d3ac9f08f4bd01a4d08053
+        x-checker-data:
+          type: git
+          tag-pattern: "^v([\\d.]+)$"
+          is-main-source: true
       - type: file
         path: io.sourceforge.pipewalker.PipeWalker.png
       - type: file
         path: io.sourceforge.pipewalker.PipeWalker.metainfo.xml
+      - type: script
+        commands:
+          - autoreconf -fiv
+        dest-filename: autogen.sh
+      # fixed upstream post 0.9.5
+      - type: patch
+        path: xdg-config-home.patch
