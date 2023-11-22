@@ -1,0 +1,28 @@
+From b2c4c8fa95fcbba9c7c61aecf8a08f5c8910c3c7 Mon Sep 17 00:00:00 2001
+From: Hildigerr Vergaray <Hildigerr.Vergaray@YmirSystems.com>
+Date: Thu, 19 Oct 2023 00:54:55 -0700
+Subject: [PATCH] comply with XDG Base Directory Specification for user
+ settings file location
+
+---
+ src/settings.cpp | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/src/settings.cpp b/src/settings.cpp
+index 5ae1a1c..748f555 100644
+--- a/src/settings.cpp
++++ b/src/settings.cpp
+@@ -185,7 +185,12 @@ bool settings::serializer::load(string& settings_file)
+ 		settings_file = getenv("USERPROFILE");
+ 		settings_file += '\\';
+ #else
+-		settings_file = getenv("HOME");
++		char* xdg_config_home = getenv("XDG_CONFIG_HOME");
++		if (xdg_config_home) settings_file = xdg_config_home;
++		else {
++			settings_file = getenv("HOME");
++			settings_file += "/.config";
++		}
+ 		settings_file += '/';
+ #endif //WIN32
+ 		settings_file += PWS_FILENAME;
