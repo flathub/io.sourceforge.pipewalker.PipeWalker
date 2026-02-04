@@ -1,6 +1,6 @@
 app-id: io.sourceforge.pipewalker.PipeWalker
 runtime: org.freedesktop.Platform
-runtime-version: '23.08'
+runtime-version: '25.08'
 sdk: org.freedesktop.Sdk
 rename-desktop-file: pipewalker.desktop
 rename-icon: pipewalker
@@ -11,35 +11,33 @@ finish-args:
   - --socket=fallback-x11
   - --socket=wayland
   - --socket=pulseaudio
-
+cleanup:
+  - /include
+  - /share/man
 modules:
+  - shared-modules/SDL2/SDL2_image.json
   - name: pipewalker
     buildsystem: meson
     config-opts:
       - -Dbuildtype=release
     post-install:
-      - install -Dm644 ../${FLATPAK_ID}.png ${FLATPAK_DEST}/share/icons/hicolor/128x128/apps/pipewalker.png
+      - install -Dm644 ../${FLATPAK_ID}.png ${FLATPAK_DEST}/share/icons/hicolor/128x128/apps/${FLATPAK_ID}.png
       - install -Dm644 ../${FLATPAK_ID}.metainfo.xml ${FLATPAK_DEST}/share/metainfo/${FLATPAK_ID}.metainfo.xml
     sources:
       - type: git
         url: https://github.com/artemsen/pipewalker
-        tag: 'v1.0'
-        commit: 9044b9d79d226d22dce3ae1f26340370139e6e35
+        tag: 'v1.1'
+        commit: 72c4cfa37c48a60aebcd537061163ccb3eabc806
         x-checker-data:
           type: git
           tag-pattern: "^v([\\d.]+)$"
           is-main-source: true
+      - type: patch
+        paths:
+         - patches/0002-no-games-subdir-for-data.patch
+         - patches/0003-fix-levels-being-already-solved.patch
+         - patches/0004-missing-includes.patch
       - type: file
         path: io.sourceforge.pipewalker.PipeWalker.png
       - type: file
         path: io.sourceforge.pipewalker.PipeWalker.metainfo.xml
-      # from Fedora
-      - type: patch
-        path: 0002-no-games-subdir-for-data.patch
-      - type: patch
-        path: 0003-fix-levels-being-already-solved.patch
-      # from Debian
-      - type: patch
-        path: 010_match-templated-args.patch
-      - type: patch
-        path: 020_use-size_t-format-string.patch
