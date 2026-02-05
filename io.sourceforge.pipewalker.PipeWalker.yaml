@@ -23,11 +23,11 @@ modules:
     sources:
       - type: git
         url: https://github.com/artemsen/pipewalker
-        tag: 'v1.0'
-        commit: 9044b9d79d226d22dce3ae1f26340370139e6e35
+        tag: v1.1
+        commit: 72c4cfa37c48a60aebcd537061163ccb3eabc806
         x-checker-data:
           type: git
-          tag-pattern: "^v([\\d.]+)$"
+          tag-pattern: ^v([\d.]+)$
           is-main-source: true
       - type: file
         path: io.sourceforge.pipewalker.PipeWalker.png
