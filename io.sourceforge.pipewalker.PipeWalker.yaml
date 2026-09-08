@@ -1,6 +1,6 @@
 app-id: io.sourceforge.pipewalker.PipeWalker
 runtime: org.freedesktop.Platform
-runtime-version: '25.08'
+runtime-version: '26.08'
 sdk: org.freedesktop.Sdk
 rename-desktop-file: pipewalker.desktop
 rename-icon: pipewalker
@@ -21,8 +21,8 @@ modules:
     config-opts:
       - -Dbuildtype=release
     post-install:
-      - install -Dm644 ../${FLATPAK_ID}.png ${FLATPAK_DEST}/share/icons/hicolor/128x128/apps/${FLATPAK_ID}.png
-      - install -Dm644 ../${FLATPAK_ID}.metainfo.xml ${FLATPAK_DEST}/share/metainfo/${FLATPAK_ID}.metainfo.xml
+      - install -Dm644 ../${FLATPAK_ID}.png -t ${FLATPAK_DEST}/share/icons/hicolor/128x128/apps/
+      - install -Dm644 ../${FLATPAK_ID}.metainfo.xml -t ${FLATPAK_DEST}/share/metainfo/
     sources:
       - type: git
         url: https://github.com/artemsen/pipewalker
